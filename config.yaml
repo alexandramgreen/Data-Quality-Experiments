@@ -1,0 +1,10 @@
+noise:
+  type: Gaussian
+  mean: 0 
+  variance: 1
+
+model:
+  type: decisionTree
+
+dataset:
+  id: 53
