@@ -4,6 +4,6 @@ import numpy as np
 
 def injectGaussianNoise(df, columnNames, mu, sigma):
     for col in columnNames:
+        # print(np.random.normal(mu, sigma, df[col].shape))
         df[col] = df[col] + np.random.normal(mu, sigma, df[col].shape)
-        print(df[col])
     return

@@ -7,31 +7,33 @@ from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.neural_network import MLPClassifier
 import matplotlib.pyplot as plt
 from noise import injectGaussianNoise
-  
+
+# 569 observations, 30 features
 # fetch dataset 
-iris = fetch_ucirepo(id=53) 
-  
+breast_cancer_wisconsin_diagnostic = fetch_ucirepo(id=17) 
 # data (as pandas dataframes) 
-X = iris.data.features
-y = iris.data.targets 
+X = breast_cancer_wisconsin_diagnostic.data.features 
+y = breast_cancer_wisconsin_diagnostic.data.targets 
+
 # metadata 
-# print(iris.metadata) 
+# print(breast_cancer_wisconsin_diagnostic.metadata) 
 # variable information 
-# print(iris.variables) 
+# print(breast_cancer_wisconsin_diagnostic.variables) 
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 80, test_size = 0.25)
+# injectGaussianNoise(X_train, ["concave_points3"], 0, X_train["concave_points3"].std()**2)
+# injectGaussianNoise(X_train, ["perimeter3"], 0, X_train["perimeter3"].std()**2)
 
-# separating training and testing data
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 75, test_size = 0.25)
 
-# decision tree!
-# clf = DecisionTreeClassifier(criterion = "gini", random_state = 75, max_depth = 2, min_samples_leaf = 5)
+# clf = DecisionTreeClassifier(criterion = "gini", random_state = 80, max_depth = 4, min_samples_leaf = 5)
+clf = MLPClassifier(random_state = 80, max_iter = 1000)
+
+# injectGaussianNoise(X_test, ["concave_points3"], 0, X_test["concave_points3"].std() ** 2)
+# injectGaussianNoise(X_test, ["perimeter3"], 0, X_test["perimeter3"].std() ** 2)
+
+
 #injectGaussianNoise(X_train, ["petal width"], 0, X_train["petal width"].std())
-#injectGaussianNoise(X_train, ["petal length"], 0, X_train["petal length"].std())
-clf = MLPClassifier(random_state = 75, max_iter = 1000)
-# clf.fit(X_train, y_train.values.ravel())
-clf.fit(X_train, y_train.values.ravel())
-# injectGaussianNoise(X_test, ["petal width"], 0, X_train["petal width"].std())
-# injectGaussianNoise(X_test, ["petal length"], 0, X_train["petal length"].std())
 
+clf.fit(X_train, y_train.values.ravel())
 
 def prediction(X_test, clf_object):
     y_pred = clf_object.predict(X_test)
@@ -43,12 +45,17 @@ def cal_accuracy(y_test, y_pred):
     print("Accuracy : ",
           accuracy_score(y_test, y_pred)*100)
     print(classification_report(y_test, y_pred))
-    
+
 y_pred = prediction(X_test, clf)
 cal_accuracy(y_test, y_pred)
+
 '''
 plt.figure(figsize=(12, 8))
 plot_tree(clf, feature_names=list(X.columns), class_names=(list(set(y.values.flatten()))), filled=True)
 plt.show()
 '''
+
+
+
+
 
